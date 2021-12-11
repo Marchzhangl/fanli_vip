@@ -81,7 +81,7 @@ func init() {
 			nabtid=121&amp;nuid=423461972&amp;nchl_param=share:106458c5-abf9-3f0d-929a-aca9c47296e5:1639174223182&amp;
 			mars_cid_a=106458c5-abf9-3f0d-929a-aca9c47296e5&amp;chl_type=share
 			*/
-			Rules: []string{"raw https?://m\\.vip\\.com/product-(\\d+)-(\\d+)\\.html",
+			Rules: []string{"raw https?://m\\.vip\\.com/",
 							"raw https?://t\\.vip\\.com/"},
 			Handle: func(s core.Sender) interface{} {
 				return getvip(s.GetContent())
