@@ -26,16 +26,13 @@ import (
 
 var vip = core.NewBucket("vip")
 
-//订单侠apikey
 var apikey = vip.Get("apikey")
 
-//商品详情
 var title string = ""
 var url string = ""
 var market_price string = ""
 var vip_price string = ""
 
-//淘宝商品结构体
 type Item struct {
 	Code int    `json:"code"`
 	Msg  string `json:"msg"`
@@ -93,7 +90,7 @@ func init() {
 			},
 		},
 	})
-	core.OttoFuncs["vip"] = getvip //类似于向核心组件注册
+	core.OttoFuncs["vip"] = getvip
 }
 
 func getvip(info string) string {
@@ -111,11 +108,7 @@ func getvip(info string) string {
 	return rlt
 }
 
-/*
-通过商品id获取淘宝客推广链接
-*/
 func getUrlConvert(iids string) string {
-	//根据id获取推广链接
 	req := httplib.Get("http://api.tbk.dingdanxia.com/vip/id_privilege?" +
 		"apikey=" + apikey +
 		"&id=" + iids +
@@ -134,7 +127,6 @@ func getUrlConvert(iids string) string {
 	return res.Data.URL
 }
 
-// 创建一个错误处理函数，避免过多的 if err != nil{} 出现
 func dropErr(e error) {
 	if e != nil {
 		panic(e)
