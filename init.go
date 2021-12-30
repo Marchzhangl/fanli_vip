@@ -22,18 +22,20 @@ import (
 	"github.com/cdle/sillyGirl/core"
 	"github.com/gin-gonic/gin"
 	//	"github.com/buger/jsonparser"
-	"github.com/beego/beego/v2/core/logs"
 )
 
 var vip = core.NewBucket("vip")
 
+//订单侠apikey
 var apikey = vip.Get("apikey")
 
+//商品详情
 var title string = ""
 var url string = ""
 var market_price string = ""
 var vip_price string = ""
 
+//淘宝商品结构体
 type Item struct {
 	Code int    `json:"code"`
 	Msg  string `json:"msg"`
@@ -78,7 +80,12 @@ func init() {
 	})
 	//添加命令
 	core.AddCommand("", []core.Function{
-		{ 
+		{ /*https://m.vip.com/product-1710612828-6919227375621606108.html?
+			nmsns=shop_android-7.58.7-weixin&amp;nst=product&amp;nsbc=&amp;
+			nct=card&amp;ncid=106458c5-abf9-3f0d-929a-aca9c47296e5&amp;
+			nabtid=121&amp;nuid=423461972&amp;nchl_param=share:106458c5-abf9-3f0d-929a-aca9c47296e5:1639174223182&amp;
+			mars_cid_a=106458c5-abf9-3f0d-929a-aca9c47296e5&amp;chl_type=share
+			*/
 			Rules: []string{"raw https?://m\\.vip\\.com/",
 							"raw https?://t\\.vip\\.com/"},
 			Handle: func(s core.Sender) interface{} {
@@ -86,8 +93,7 @@ func init() {
 			},
 		},
 	})
-	core.OttoFuncs["vip"] = getvip
-	logs.Info("唯品会佣金短链启动：关注QQ群418353744获取更多消息")
+	core.OttoFuncs["vip"] = getvip //类似于向核心组件注册
 }
 
 func getvip(info string) string {
@@ -105,7 +111,11 @@ func getvip(info string) string {
 	return rlt
 }
 
+/*
+通过商品id获取淘宝客推广链接
+*/
 func getUrlConvert(iids string) string {
+	//根据id获取推广链接
 	req := httplib.Get("http://api.tbk.dingdanxia.com/vip/id_privilege?" +
 		"apikey=" + apikey +
 		"&id=" + iids +
@@ -124,6 +134,7 @@ func getUrlConvert(iids string) string {
 	return res.Data.URL
 }
 
+// 创建一个错误处理函数，避免过多的 if err != nil{} 出现
 func dropErr(e error) {
 	if e != nil {
 		panic(e)
