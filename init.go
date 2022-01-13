@@ -74,10 +74,6 @@ type Item struct {
 
 func init() {
 
-	core.Server.GET("/vip/:sku", func(c *gin.Context) {
-		sku := c.Param("sku")
-		c.String(200, core.OttoFuncs["vip"](sku))
-	})
 	//添加命令
 	core.AddCommand("", []core.Function{
 		{ /*https://m.vip.com/product-1710612828-6919227375621606108.html?
@@ -93,7 +89,6 @@ func init() {
 			},
 		},
 	})
-	core.OttoFuncs["vip"] = getvip //类似于向核心组件注册
 }
 
 func getvip(info string) string {
